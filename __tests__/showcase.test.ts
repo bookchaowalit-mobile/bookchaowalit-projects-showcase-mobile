@@ -80,3 +80,20 @@ describe('helpers', () => {
     expect(projectHost('nope')).toBe('nope');
   });
 });
+
+describe('pass 3 edge cases', () => {
+  const all = flatten();
+  it('a non-Latin query no longer matches every project', () => {
+    expect(searchShowcase(all, 'ปฏิทิน')).toEqual([]);
+    expect(searchShowcase(all, '日历')).toEqual([]);
+  });
+  it('folds accents and full-width letters', () => {
+    const accented = searchShowcase(all, 'Cálendar').map(i => i.slug);
+    expect(accented).toContain('calendar-app');
+    expect(searchShowcase(all, '\uFF43\uFF41\uFF4C\uFF45\uFF4E\uFF44\uFF41\uFF52').map(i => i.slug)).toContain('calendar-app');
+  });
+  it('matches non-Latin names when the catalog has them', () => {
+    const thai = [{name: 'ปฏิทิน', slug: 'th-cal', url: 'https://example.com', categoryId: 'x', category: 'X'}];
+    expect(searchShowcase(thai, 'ปฏิ')).toHaveLength(1);
+  });
+});

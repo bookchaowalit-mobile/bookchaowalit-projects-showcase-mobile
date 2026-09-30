@@ -18,10 +18,18 @@ export function flatten(
   );
 }
 
+/**
+ * Search key: accents folded ("Émoji" → "emoji"), full-width folded, any
+ * letter or digit kept. Stripping everything outside a–z used to turn a Thai
+ * or other non-Latin query into "", which matched every project.
+ */
 function normalize(text: string): string {
   return text
+    .normalize('NFKD')
+    // Only Latin combining diacritics: Thai vowel/tone marks are letters' parts.
+    .replace(/[\u0300-\u036f]+/g, '')
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ')
     .trim();
 }
 

@@ -47,3 +47,10 @@ Score: 6/10 (was 5/10) — favourites persist and can be filtered; native projec
 - Robustness: `Linking.openURL` failures are caught.
 - Advisories: no same-major fixes available; needs the RN upgrade (P2).
 - Verified: lint, typecheck, jest (also `--no-cache`), `npm run bundle:android`.
+
+## Done in this pass (pass 3)
+
+Score: 7.5/10 (was 7/10) — edge-case hunt in `src/lib/showcase.ts`.
+
+- Bug: search normalised by deleting everything outside `a-z0-9`, so a Thai/CJK query became "" and matched **every** project, and "Cálendar" became "c lendar". Normalisation now folds Latin diacritics and full-width letters but keeps any Unicode letter, digit or mark (Thai vowel marks included).
+- Verified: lint, typecheck, 22 Jest tests, `react-native bundle` for Android.
