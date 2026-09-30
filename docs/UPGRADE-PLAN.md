@@ -21,7 +21,7 @@
 ### P1
 - Share one catalog source with the web frontends instead of the mirrored
   `src/lib/catalog.ts` (copied from recommendation-engine-frontend).
-- Favourites (AsyncStorage) and a project detail screen.
+- Project detail screen (description, stack, links) once the catalog has the data.
 
 ### P2
 - Upgrade RN 0.76 -> current and ESLint 9 flat config.
@@ -37,3 +37,13 @@
   RN 0.76 template dev dependencies and a committed `package-lock.json`.
 - CI runs `npm ci`, lint (0 warnings), typecheck, Jest and a Metro Android
   bundle with no failure masking.
+
+## Done in this pass (pass 2)
+
+Score: 6/10 (was 5/10) — favourites persist and can be filtered; native projects and richer catalog data still open.
+
+- Favourites: ☆/★ per project and a "★ n" filter chip; slugs persist with `@react-native-async-storage/async-storage` 2.2.0 via `src/usePersistentState.ts` + versioned codecs in `src/lib/persist.ts` (a failed read never overwrites stored data). Project detail screen still open (P1).
+- Tests: toggle/filter helpers, codec cases, and a remount test proving favourites survive a new session (19 jest tests). Jest gets the official storage mock and a 20 s timeout (a cold `--no-cache` run timed out at 5 s).
+- Robustness: `Linking.openURL` failures are caught.
+- Advisories: no same-major fixes available; needs the RN upgrade (P2).
+- Verified: lint, typecheck, jest (also `--no-cache`), `npm run bundle:android`.
